@@ -1,8 +1,6 @@
 name: notify
 
-on:
-  push:
-    branches: [main]
+on: push
 
 jobs:
   notify:
@@ -20,4 +18,4 @@ jobs:
 
             ${{ github.event.commits[0].message }}
 
-            [commit link](https://github.com/${{ github.repository }}/commit/${{github.sha}})
+            [commit link](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
