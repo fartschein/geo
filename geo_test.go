@@ -5,7 +5,8 @@
 package geo
 
 import (
-  "testing"
+	"fmt"
+	"testing"
 )
 
 const (
@@ -108,4 +109,16 @@ func TestGreatCircleIntermediate(t *testing.T) {
      (*points)[1].Longitude != secondPointLongitude {
     t.Errorf("Unexpected result, points do not match fixed points")
   }
+}
+
+func TestCoordinateDisplacement(t *testing.T) {
+  coordDeg := &Coordinates{
+    Latitude: fixedLatitudeDegrees,
+    Longitude: fixedLongitudeDegrees,
+    Type: CoordinatesDegrees,
+  }
+
+  // Apply a 10m offset
+  coords := CoordinateDisplacement(coordDeg, 10)
+  fmt.Printf("Original coords: %+v\n Displaced coords (10m): %+v\n", coordDeg, coords)
 }

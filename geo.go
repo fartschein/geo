@@ -12,6 +12,8 @@ const (
   // Coordinate type information
   CoordinatesRadians = 1
   CoordinatesDegrees = 2
+  EarthRadiusKiloMeters = 6371
+  EarthRadiusMeters = 6378137
 )
 
 type Coordinates struct {
@@ -51,6 +53,7 @@ func ConvertToDegrees(in *Coordinates) *Coordinates {
 }
 
 
+// Depending on the unit of the radius return value is either in meter or kilometers.
 func GreatCircleDistance(p *Coordinates, q *Coordinates, r int) float64 {
   c1 := ConvertToRadians(p)
   c2 := ConvertToRadians(q)
@@ -100,4 +103,30 @@ func GreatCircleIntermediate(p *Coordinates, q *Coordinates, n float64) *[]Coord
   s := seqCoords(1, n2)
   
   return &s
+}
+
+/* Calculate displacement of coordinates based on the flat-earth approximation.
+ *
+ * This function is based on an algorithm is fairly accurate when performing
+ * small displacements but gets increasingly inaccurate (> 10m when applying a
+ * 1000m offset). The offset is a value in meters.
+ */
+func CoordinateDisplacement(c *Coordinates, offset float64) *Coordinates {
+  var offsetCoords Coordinates
+  var adjustedCoords Coordinates
+
+  c1 := ConvertToRadians(c)
+  c2 := ConvertToDegrees(c)
+
+  offsetCoords.Latitude = offset/EarthRadiusMeters
+  offsetCoords.Longitude = offset/(EarthRadiusMeters*math.Cos(c1.Latitude))
+  offsetCoords.Type = CoordinatesRadians
+
+  c3 := ConvertToDegrees(&offsetCoords)
+
+  adjustedCoords.Latitude = c2.Latitude + c3.Latitude 
+  adjustedCoords.Longitude = c2.Longitude + c3.Longitude 
+  adjustedCoords.Type = CoordinatesDegrees
+
+  return &adjustedCoords
 }
