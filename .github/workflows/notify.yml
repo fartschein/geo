@@ -12,6 +12,6 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           disable_notification: true
           disable_web_page_preview: true
-          format: markdown
+          format: html
           message: |
-            ${{ github.actor }} created [commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) in [${{ github.repository }}](https://github.com/${{ github.repository }}): **${{ github.event.commits[0].message }}**
+            ${{ github.actor }} created <a href="https://github.com/${{ github.repository }}/commit/${{ github.sha }}">commit</a> in <a href="https://github.com/${{ github.repository }}">${{ github.repository }}</a>: <strong>${{ github.event.commits[0].message }}</strong>
