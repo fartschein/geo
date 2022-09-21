@@ -14,8 +14,4 @@ jobs:
           disable_web_page_preview: true
           format: markdown
           message: |
-            ${{ github.actor }} created commit in [${{ github.repository }}](https://github.com/${{ github.repository }}):
-
-            ${{ github.event.commits[0].message }}
-
-            [commit link](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+            ${{ github.actor }} created [commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) in [${{ github.repository }}](https://github.com/${{ github.repository }}): **${{ github.event.commits[0].message }}**
